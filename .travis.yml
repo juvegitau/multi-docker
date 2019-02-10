@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t juvegitau/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run juvegitau/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t juvegitau/multi-client ./client
+  - docker build -t juvegitau/multi-nginx ./nginx
+  - docker build -t juvegitau/multi-server ./server
+  - docker build -t juvegitau/multi-worker ./worker
+  #Login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push to docker hub
+  - docker push juvegitau/multi-client
+  - docker push juvegitau/multi-nginx
+  - docker push juvegitau/multi-server
+  - docker push juvegitau/multi-worker
