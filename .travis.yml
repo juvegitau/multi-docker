@@ -15,7 +15,8 @@ after_success:
   - docker build -t juvegitau/multi-worker ./worker
   #Login to docker CLI
   #- echo "$DOCKER_PASSWORD"
-  - echo $DOCKER_PASSWORD | docker login -u juvegitau --password-stdin
+  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin
+  #- docker login -u juvegitau --password
   # push to docker hub
   - docker push juvegitau/multi-client
   - docker push juvegitau/multi-nginx
